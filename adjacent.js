@@ -26,7 +26,13 @@ exports.parseGame = function(str) {
   if (!matches || (boardSize = parseInt(matches[1])) < 2) {
     throw new Error('invalid adjacent board');
   }
+
+
   var elements = matches[2].split(',').slice(0, -1);
+
+  if(elements.length !== (boardSize * boardSize)){
+    throw new Error('incorrect number of cells');
+  }
 
   var board = new Array(boardSize);
   for (var i = 0; i < board.length; i++) {
