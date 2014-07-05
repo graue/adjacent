@@ -25,6 +25,29 @@ function parseElement(str, boardSize) {
   return {num: nums, adj: adjacencies};
 }
 
+function isBoardConsistent(board){
+  for (var row = 0; row < board.length; row++) {
+    for (var col = 0; col < board.length; col++) {
+      if (row < board.length-1) {
+        // check consistency looking down
+        if ((board[row]  [col].adj.indexOf('D') !== -1) ^
+            (board[row+1][col].adj.indexOf('U') !== -1)) {
+          return false;
+        }
+      }
+
+      if (col < board.length-1) {
+        // check consistency looking right
+        if ((board[row][col]  .adj.indexOf('R') !== -1) ^
+            (board[row][col+1].adj.indexOf('L') !== -1)) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
 exports.parseGame = function(str) {
   var matches = str.match(/^(\d+)a:((\d+[DLRU]*,)+)$/);
   var boardSize;
@@ -44,6 +67,10 @@ exports.parseGame = function(str) {
     board[i] = elements.slice(i*boardSize, (i+1)*boardSize).map(function(el) {
       return parseElement(el, boardSize);
     });
+  }
+
+  if (!isBoardConsistent(board)) {
+    throw new Error('board adjacencies are inconsistent');
   }
 
   return board;
