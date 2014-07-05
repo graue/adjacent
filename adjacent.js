@@ -75,3 +75,24 @@ exports.parseGame = function(str) {
 
   return board;
 };
+
+function printBoard(board) {
+  for (var row = 0; row < board.length; row++) {
+    var str = ['', ''];
+    for (var col = 0; col < board.length; col++) {
+      if (board[row][col].num.length > 1) {
+        str[0] += '·';
+      } else {
+        str[0] += board[row][col].num[0];
+      }
+      str[0] += (~board[row][col].adj.indexOf('R') ? '|' : ' ');
+      str[1] += (~board[row][col].adj.indexOf('D') ? '—' : ' ') + ' ';
+    }
+    console.log(str[0]);
+    if (row < board.length-1) {
+      console.log(str[1]);
+    }
+  }
+}
+
+printBoard(exports.parseGame(sampleGame));
