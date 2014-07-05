@@ -18,12 +18,12 @@ var sampleGameParsed = [
 var invalidGameStrings = [
   {str: '3a:1,0RD,0DL,0RD,0URDL,0UL,0UR,0UL,0',
    reason: 'missing comma at end'},
-  {str: '3a:1,0RD,0DL,0RD,0URDL,0UL,0UR,0U,0,',
-   reason: 'conflict: UR left of U'},
   {str: '3a:1,0RD,0DL,0RD,0URDL,0UL,0UR,0UL,0,0,',
    reason: 'wrong number of cells'},
   {str: '3a:4,0RD,0DL,0RD,0URDL,0UL,0UR,0UL,0,',
-   reason: 'cell value out of range'}];
+   reason: 'cell value out of range'},
+  {str: '3a:1,0RD,0DL,0RD,0URDL,0UL,0UR,0U,0,',
+   reason: 'conflict: UR left of U'}];
 
 describe('game parser', function() {
   it('parses games', function() {
