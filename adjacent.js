@@ -11,6 +11,11 @@ function parseElement(str, boardSize) {
   var matches = str.match(/(\d+)([DLRU]*)/);
 
   var nums = [parseInt(matches[1], 10)];
+
+  if (nums[0] > boardSize) {
+    throw new Error('cell value out of range');
+  }
+
   if (nums[0] === 0) {
     nums = _u.range(1, boardSize + 1);
   }
