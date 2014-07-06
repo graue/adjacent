@@ -143,6 +143,40 @@ function eliminateAt(board, row, col) {
   }));
 }
 
+// Don't know what to call this, but when you have, for example, two
+// cells each with the possibilities [1,2], you know no other cell in
+// the line can be 1 or 2. Likewise when you have three cells with
+// possibilities [1,3,5], [3,5], and [1,3,5], you know no other cell
+// in the line can be 1, 3, or 5. This function detects such situations
+// and eliminates options accordingly.
+//
+// Takes: array of cells,
+// where each cell is an array of possible values.
+//
+// Returns: same, possibly with some possible values removed.
+function reduceLinePossibilities(line) {
+  line = line.slice();
+
+  for (var i = 0; i < line.length; i++) {
+    cellSet = [i];
+    for (var j = 0; j < line.length; j++) {
+      if (i === j) continue;
+      if (_u.isEqual(_u.union(line[i], line[j]), line[i])) {
+        cellSet.push(j);
+      }
+    }
+
+    if (cellSet.length === line[i].length) {
+      for (j = 0; j < line.length; j++) {
+        if (cellSet.indexOf(j) !== -1) continue;
+        line[j] = _u.difference(line[j], line[i]);
+      }
+    }
+  }
+
+  return line;
+}
+
 // Iterates over board cells trying to make inferences that reduce the
 // possibilities at each cell (modifying 'board' in-place). Returns true
 // if anything was changed.
@@ -162,7 +196,39 @@ function solveStep(board) {
       }
     }
   }
+
+  for (col = 0; col < board.length; col++) {
+    var line = _u.range(board.length).map(function(row) {
+      return board[row][col].num;
+    });
+    line = reduceLinePossibilities(line);
+    line.forEach(function(newnums, row) {
+      if (!_u.isEqual(newnums, board[row][col].num)) {
+        changed = true;
+        board[row][col].num = newnums;
+      }
+    });
+  }
+
+  for (row = 0; row < board.length; row++) {
+    var line = _u.range(board.length).map(function(col) {
+      return board[row][col].num;
+    });
+    line = reduceLinePossibilities(line);
+    line.forEach(function(newnums, col) {
+      if (!_u.isEqual(newnums, board[row][col].num)) {
+        changed = true;
+        board[row][col].num = newnums;
+      }
+    });
+  }
+
   return changed;
+}
+
+function solveBoard(board) {
+  while (solveStep(board))
+    ;
 }
 
 printBoard(exports.parseGame(sampleGame));
