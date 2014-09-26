@@ -7,4 +7,4 @@ puzzle.
 
 Is not able to solve all puzzles.
 
-Pair programmed with @will-sommers.
+Pair programmed with [Will Sommers](https://github.com/will-sommers).
